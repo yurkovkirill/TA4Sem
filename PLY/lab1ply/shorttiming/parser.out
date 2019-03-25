@@ -1,0 +1,95 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> fexpression
+Rule 1     fexpression -> START expression HASHTAG NEWLINE
+Rule 2     expression -> expression OP VAR
+Rule 3     expression -> VAR
+
+Terminals, with rules where they appear
+
+HASHTAG              : 1
+NEWLINE              : 1
+OP                   : 2
+START                : 1
+VAR                  : 2 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2
+fexpression          : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . fexpression
+    (1) fexpression -> . START expression HASHTAG NEWLINE
+
+    START           shift and go to state 2
+
+    fexpression                    shift and go to state 1
+
+state 1
+
+    (0) S' -> fexpression .
+
+
+
+state 2
+
+    (1) fexpression -> START . expression HASHTAG NEWLINE
+    (2) expression -> . expression OP VAR
+    (3) expression -> . VAR
+
+    VAR             shift and go to state 4
+
+    expression                     shift and go to state 3
+
+state 3
+
+    (1) fexpression -> START expression . HASHTAG NEWLINE
+    (2) expression -> expression . OP VAR
+
+    HASHTAG         shift and go to state 5
+    OP              shift and go to state 6
+
+
+state 4
+
+    (3) expression -> VAR .
+
+    HASHTAG         reduce using rule 3 (expression -> VAR .)
+    OP              reduce using rule 3 (expression -> VAR .)
+
+
+state 5
+
+    (1) fexpression -> START expression HASHTAG . NEWLINE
+
+    NEWLINE         shift and go to state 7
+
+
+state 6
+
+    (2) expression -> expression OP . VAR
+
+    VAR             shift and go to state 8
+
+
+state 7
+
+    (1) fexpression -> START expression HASHTAG NEWLINE .
+
+    $end            reduce using rule 1 (fexpression -> START expression HASHTAG NEWLINE .)
+
+
+state 8
+
+    (2) expression -> expression OP VAR .
+
+    HASHTAG         reduce using rule 2 (expression -> expression OP VAR .)
+    OP              reduce using rule 2 (expression -> expression OP VAR .)
+

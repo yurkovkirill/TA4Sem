@@ -1,0 +1,46 @@
+%start Map1::Start
+%class Sen//to change
+
+%map Map1
+%%
+// State		Transition		End State		Action(s)
+
+Start {
+		Less()				First			{}
+}
+First {
+		Hyphen()			VarFirst		{}
+}
+
+VarFirst {
+		Exc()				Variable		{addbuf('!');}
+		Let(ch)				Variable		{addbuf(ch);}
+}
+
+Variable {
+		Let(ch)[ctxt.getBL()<=16]	Variable		{addbuf(ch);}
+		Num(ch)[ctxt.getBL()<=16]	Variable		{addbuf(ch);}
+		Op()				VarFirst	{godict();reset();}
+		Hashtag()			OK			{godict();Acceptable();}
+
+}
+Error {
+		EOS				nil			{Unacceptable();}
+}
+OK{
+		EOS				nil			{Acceptable();}
+
+}
+Default{
+		Exc()			Error 			{}
+		Num(ch)			Error			{}
+		Let(ch)			Error			{}
+		Unknown()		Error			{}
+		Op()			Error			{}
+		EOS				Error			{Unacceptable();}
+		Hashtag()		Error			{}
+		Hyphen()		Error			{}
+		Reset()			Start			{resetAll();}
+		Less()			Error			{}
+}
+%%
